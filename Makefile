@@ -1,18 +1,26 @@
-NAME = sudoku
-objects = sudoku.o print.o
-flags = -O -Wall -Wextra -Werror -W -pedantic -ansi
-CC = gcc
+
+NAME=sudoku
+
+OBJECTS=sudoku.o print.o
+OBJDIRS=./obj/
+INCDIRS=. ./inc/
+INCLUDES=$(foreach D,$(INCDIRS),-I$(D))
+CFLAGS=-O -Wall -Wextra -Werror -pedantic -ansi -std=c11 $(INCLUDES)
+CC=gcc
+
 # Targets that do not refer to files but are just actions are called phony targets
 .PHONY: all clean
 
 all: $(NAME)
 
-$(NAME): $(objects)
+$(NAME): $(OBJECTS)
+	$(CC) -o $@ $^
 
-$(objects): sudoku.h
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $^
 
 clean:
-	rm -f *.o $(NAME)
+	rm -f $(OBJECTS) $(NAME)
 
 # $@ = target name
 # $? = prerequisites that are newer than target

@@ -7,18 +7,12 @@ void print_grid(t_sudoku* sudoku) {
         if (i > 0 && i % 9 != 0 && i % 3 == 0)
             printf("| ");
         if (i > 0 && i % 9 == 0)
-        {
             printf("\n");
-        }
         if (i > 0 && i % 27 == 0 ) 
-        {
             printf("----------------------\n");
-
-        }
         if (sudoku->grid[i] == 0)
             printf("- ");
         else
-            printf("%d ", sudoku->grid[i]);
+            printf("%ld ", sudoku->grid[i]);
     }
-
 }

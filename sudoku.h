@@ -9,12 +9,12 @@
 typedef struct s_sudoku {
     size_t grid[NN]; 
     size_t freedoms[NN];
-    size_t rows_known[N];
-    size_t cols_known[N];
-    size_t blocks_known[N];
+    size_t row_neighbours_known[N];
+    size_t col_neighbours_known[N];
+    size_t blocks_neighbours_known[N];
 } t_sudoku;
 
-void load_sudoku(t_sudoku* grid, int fd, char* filename);
+void load_sudoku(t_sudoku* grid, int fd);
 void print_grid(t_sudoku* sudoku);
 void collapse_entropy(t_sudoku *sudoku);
 
