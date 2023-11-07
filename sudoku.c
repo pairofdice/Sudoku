@@ -6,6 +6,9 @@
 #include <unistd.h>
 
 #define BUFF_SIZE 300
+void reduce_freedoms_row(t_sudoku *sudoku, size_t i)  { }
+void reduce_freedoms_col(t_sudoku *sudoku, size_t i)  { }
+void reduce_freedoms_block(t_sudoku *sudoku, size_t i)  { }
 
 void handle_args(int argc, char **argv, t_sudoku *sudoku) {
     int fd;
@@ -18,18 +21,56 @@ void handle_args(int argc, char **argv, t_sudoku *sudoku) {
     else 
     {
         printf("Usage: ./sudoku <file>\n");
+        exit(1);
     }
     load_sudoku(sudoku, fd,  argv[1]);
 }
 
 void collapse_entropy(t_sudoku * sudoku) {
+    for (size_t i = 0; i < NN; ++i) {
+       reduce_freedoms_row(sudoku, i); 
+       reduce_freedoms_col(sudoku, i); 
+       reduce_freedoms_block(sudoku, i); 
+    }
+
 
 }
 
 int main(int argc, char* argv[argc+1]) {
     t_sudoku sudoku; 
-    handle_args(argc, argv, &sudoku);
-    print_grid(&sudoku);
+    // handle_args(argc, argv, &sudoku);
+    // print_grid(&sudoku);
+    size_t i = 0b0000000001;
+    printf("%09b %d\n", i, i);
+    i = 0b0000000010;
+    printf("%09b %d\n", i, i);
+    i = 0b0000000100;
+    printf("%09b %d\n", i, i);
+    i = 0b0000001000;
+    printf("%09b %d\n", i, i);
+    i = 0b0000010000;
+    printf("%09b %d\n", i, i);
+    i = 0b0000100000;
+    printf("%09b %d\n", i, i);
+    i = 0b0001000000;
+    printf("%09b %d\n", i, i);
+    i = 0b0010000000;
+    printf("%09b %d\n", i, i);
+    i = 0b0100000000;
+    printf("%09b %d\n", i, i);
+
+    printf("--\n");
+    printf("%d\n", 1 << 1);
+    printf("%d\n", 1 << 2);
+    printf("%d\n", 1 << 3);
+    printf("%d\n", 1 << 4);
+    printf("%d\n", 1 << 5);
+    printf("%d\n", 1 << 6);
+    printf("%d\n", 1 << 7);
+    printf("%d\n", 1 << 8);
+    printf("%d\n", 1 << 9);
+
+
 }
 
 
@@ -45,7 +86,6 @@ void load_sudoku(t_sudoku *sudoku, int fd,  char* filename) {
     {
         exit (1);
     }
-    printf("SUDOKU: \n%s", buffer);
 
     size_t i = 0;
     size_t k = 0;
@@ -61,7 +101,6 @@ void load_sudoku(t_sudoku *sudoku, int fd,  char* filename) {
             sudoku->grid[k] = buffer[i] - '0';
             ++k;
         }
-        printf("%c", buffer[i]);
         ++i;
     }
 }

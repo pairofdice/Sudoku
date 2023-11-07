@@ -1,6 +1,7 @@
 NAME = sudoku
 objects = sudoku.o print.o
-
+flags = -O -Wall -Wextra -Werror -W -pedantic -ansi
+CC = gcc
 # Targets that do not refer to files but are just actions are called phony targets
 .PHONY: all clean
 
