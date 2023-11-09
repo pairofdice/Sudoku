@@ -16,6 +16,5 @@ typedef struct s_sudoku {
 
 void load_sudoku(t_sudoku* grid, int fd);
 void print_grid(t_sudoku* sudoku);
-void collapse_entropy(t_sudoku *sudoku);
-
+void solve(t_sudoku *sudoku);
 #endif

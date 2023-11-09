@@ -5,10 +5,11 @@ OBJECTS=sudoku.o print.o
 OBJDIRS=./obj/
 INCDIRS=. ./inc/
 INCLUDES=$(foreach D,$(INCDIRS),-I$(D))
-CFLAGS=-O -Wall -Wextra -Werror -pedantic -ansi -std=c11 $(INCLUDES)
+
+DEPFLAGS=-MP -MD
+# CFLAGS=-O -Wall -Wextra -Werror -pedantic -ansi -std=c11 $(INCLUDES)
 CC=gcc
 
-# Targets that do not refer to files but are just actions are called phony targets
 .PHONY: all clean
 
 all: $(NAME)
@@ -36,7 +37,7 @@ clean:
 
 # Variables used by implicit rules
 # CC 		--- c compiler, default cc
-# CXX		--- cpp compiler, default f++
+# CXX		--- cpp compiler, default g++
 # CFLAGS	--- Extra flags to give the compiler
 # CXXFLAGS
 # CPPFLAGS	--- Extra flags for the C preprocessor
