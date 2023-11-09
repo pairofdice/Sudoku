@@ -40,18 +40,20 @@ size_t count_freedoms(size_t row_constraints ,size_t col_constraints, size_t blo
     freedoms_mask &= all_ones << 1;     // sets the least significant bit to 0 since we use 1-9th
     freedoms_mask &= ~(all_ones << 10); // should set all the more significant bits back to 0
     
-    printf("Freedom mask: %.32b\n", freedoms_mask);
+    //printf("Freedom mask: %.32b\n", freedoms_mask);
+
+    // need to count the number of 1's in the mask
+    // ie. Hamming weight or population count
     size_t pop_count = 0;
     for (size_t i = 0; i < 10; ++i)
     {
         if (freedoms_mask & 1) 
-        {
             ++pop_count;
-        }
         freedoms_mask = freedoms_mask >> 1;
     }
     return pop_count;
 }
+
 void handle_args(int argc, char **argv, t_sudoku *sudoku) {
     int fd;
 
@@ -70,9 +72,25 @@ void handle_args(int argc, char **argv, t_sudoku *sudoku) {
 
 void solve(t_sudoku *sudoku)
 {
-    for (size_t i = 0; i < NN; ++i)
+    printf("\n\nSolve! (count freedoms for now)\n");
+    for (size_t i = 0; i < N; ++i)
     {
+        for (size_t j = 0; j < N; ++j)
+        {
+            if (sudoku->grid[i*N+j] == 0)
+            {
+            printf("%d ",
+                    count_freedoms(
+                        sudoku->row_constraints[i],
+                        sudoku->col_constraints[j],
+                        sudoku->block_constraints[(i/3)*3 + j/3]));
+            } else {
+                printf("- ");
+            }
+        }
+        printf("\n");
     }
+    printf("Now just set each cell with freedom count of 1 to the value\nthen collapse entropy and repeat until no progress, then do\nbacktracking recursive depth-first-search or something.\n");
 
 }
 
@@ -80,14 +98,6 @@ int main(int argc, char* argv[argc+1]) {
     t_sudoku sudoku = { 0 };
     handle_args(argc, argv, &sudoku);
 
-    size_t all_ones = 0;
-    --all_ones;
-    all_ones = all_ones << 10;
-    printf("All ones: %.32b\n", all_ones);
-    size_t count = count_freedoms(all_ones, all_ones, all_ones);
-    printf("Freedom count: %d\n", count);
-    count = count_freedoms(sudoku.row_constraints[0], sudoku.col_constraints[0], sudoku.block_constraints[0]);
-    printf("Freedom count: %d\n", count);
 //    for (size_t row = 0; row < 9; ++row)
 //    {
 //        for (size_t col = 0; col < 9; ++col) 
@@ -100,7 +110,7 @@ int main(int argc, char* argv[argc+1]) {
 //    }
     print_grid(&sudoku);
     solve(&sudoku);
-    print_grid(&sudoku);
+    // print_grid(&sudoku);
 }
 
 
