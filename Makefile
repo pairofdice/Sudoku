@@ -1,14 +1,14 @@
 
-NAME=sudoku
+NAME = sudoku
 
-OBJECTS=sudoku.o print.o
-OBJDIRS=./obj/
-INCDIRS=. ./inc/
-INCLUDES=$(foreach D,$(INCDIRS),-I$(D))
+OBJECTS = sudoku.o print.o
+OBJDIRS = ./obj/
+INCDIRS = . ./inc/
+INCLUDES = $(foreach D,$(INCDIRS),-I$(D))
 
-DEPFLAGS=-MP -MD
+DEPFLAGS = -MP -MD
 # CFLAGS=-O -Wall -Wextra -Werror -pedantic -ansi -std=c11 $(INCLUDES)
-CC=gcc
+CC = gcc
 
 .PHONY: all clean
 

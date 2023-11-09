@@ -8,16 +8,18 @@
 #define BUFF_SIZE 300
 #define BLANK 0
 
+
 void collapse_entropy(t_sudoku *sudoku, size_t val, size_t index)
 {
     size_t mask = 1 << val;
     size_t col = index % N;
     size_t row = index / N;
-    sudoku->row_neighbours_known[row] |= 1 << val;
-    sudoku->col_neighbours_known[col] |= 1 << val;
-    printf(" - Setting: %d: %.10b, row: %d = %.10b\n", val, mask, row, sudoku->row_neighbours_known[row]);
+    sudoku->row_constraints[row] |= mask;
+    sudoku->col_constraints[col] |= mask;
+    // map 0-9 row/col into the 9 3x3 block linear index
+    sudoku->block_constraints[(row / 3) * 3 + (col / 3)] |= mask;
+    printf(" - Setting: %d: %.10b, row: %d = %.10b\n", val, mask, row, sudoku->row_constraints[row]);
 }
-            
 
 void handle_args(int argc, char **argv, t_sudoku *sudoku) {
     int fd;
@@ -42,6 +44,17 @@ void solve(t_sudoku *sudoku)
 }
 
 int main(int argc, char* argv[argc+1]) {
+
+    for (size_t row = 0; row < 9; ++row)
+    {
+        for (size_t col = 0; col < 9; ++col) 
+        {
+            size_t i = (row / 3) * 3;
+            size_t j = col / 3;
+            size_t index = i + j;
+            printf("row: %d, col: %d, index: %d \n", row, col, index);
+        }
+    }
     t_sudoku sudoku = { 0 };
     handle_args(argc, argv, &sudoku);
     print_grid(&sudoku);
@@ -73,12 +86,13 @@ void load_sudoku(t_sudoku *sudoku, int fd) {
             continue ;
         }
         val -= '0';
-        if (val <=9)
+        if (val <= 9)
         {
-            sudoku->grid[k] = val ;
             if (val > 0)
+            {
+                sudoku->grid[k] = val ;
                 collapse_entropy(sudoku, val, k);
-
+            }
             ++k;
         }
         ++i;
